@@ -34,8 +34,8 @@ jobs:
     - name: Deploy to Server
       uses: appleboy/scp-action@v1  # 使用SCP文件传输插件
       with:
-        host: ${{ secrets.SERVER_IP }}     # 使用您在Secrets中设置的服务器IP
-        username: deployer                 # 服务器上的用户名（之前创建的）
+        host: ${{ 49.232.162.183 }}     # 使用您在Secrets中设置的服务器IP
+        username: anxiaopeng                 # 服务器上的用户名（之前创建的）
         key: ${{ secrets.SERVER_SSH_KEY }} # 使用SSH私钥
         port: 22                          # SSH端口
         source: "dist/*"                   # 要传输的文件（构建产物）
