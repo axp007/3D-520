@@ -2,35 +2,41 @@ name: Deploy to Server
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]  # 当代码推送到main分支时触发
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # 使用最新版Ubuntu系统
     
     steps:
+    # 第一步：获取代码
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 如果是网页项目（HTML/CSS/JS），删除下面Node.js相关步骤
+    # 第二步：设置Node.js环境（如果是其他语言项目，这一步需要调整）
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '20'  # 使用Node.js 20版本
 
-    # 如果是网页项目，删除下面两行
+    # 第三步：安装依赖
     - name: Install dependencies
-      run: npm install
+      run: npm install  # 如果是其他包管理器，改为yarn或pnpm
 
+    # 第四步：构建项目
     - name: Build project
-      run: npm run build || echo "No build command"  # 安全措施
+      run: npm run build  # 替换为您的实际构建命令
+      # 注意：如果您的构建命令不同，请修改这里
+      # 例如Vue项目通常是 `npm run build`
+      # React项目通常是 `npm run build`
 
+    # 第五步：部署到服务器
     - name: Deploy to Server
-      uses: appleboy/scp-action@v1
+      uses: appleboy/scp-action@v1  # 使用SCP文件传输插件
       with:
-        host: ${{ secrets.SERVER_IP }}
-        username: deployer
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        port: 22
-        source: "dist/*"  # 网页项目可改为 "*.html, css/, js/, images/"
-        target: "/root/anxiaopeng"
+        host: ${{ secrets.SERVER_IP }}     # 使用您在Secrets中设置的服务器IP
+        username: deployer                 # 服务器上的用户名（之前创建的）
+        key: ${{ secrets.SERVER_SSH_KEY }} # 使用SSH私钥
+        port: 22                          # SSH端口
+        source: "dist/*"                   # 要传输的文件（构建产物）
+        target: "/root/anxiaopeng"         # 服务器上的目标目录
